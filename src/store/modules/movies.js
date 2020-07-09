@@ -20,6 +20,7 @@ const moviesStore = {
     movies: {},
   },
   getters: {
+    moviesList: ({ movies }) => movies,
     slicedIDs: ({ top250 }) => (from, to) => top250.slice(from, to),
     currentPage: ({ currentPage }) => currentPage,
     moviesPerPage: ({ moviesPerPage }) => moviesPerPage,
