@@ -45,7 +45,7 @@ export default {
   cursor: pointer;
   border-radius: 5px;
   overflow: hidden;
-  transition: all 0.2s ease-in;
+  transition: all 0.2s ease;
   height: 400px;
 }
 
@@ -73,7 +73,7 @@ export default {
   justify-content: space-between;
   height: 100%;
   opacity: 0;
-  transition: all 0.2s ease-in;
+  transition: all 0.2s ease;
 }
 
 .movie-item:hover .movie-info-wrap{
