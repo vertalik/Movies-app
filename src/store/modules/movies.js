@@ -9,7 +9,8 @@ function serializeResponse(movies) {
   }, {});
 }
 
-const { MOVIES, CURRENT_PAGE } = mutations;
+// eslint-disable-next-line object-curly-newline
+const { MOVIES, CURRENT_PAGE, REMOVE_MOVIE, SEARCH_TOGGLE } = mutations;
 
 const moviesStore = {
   namespaced: true,
@@ -18,6 +19,7 @@ const moviesStore = {
     moviesPerPage: 12,
     currentPage: 1,
     movies: {},
+    isSearch: false,
   },
   getters: {
     moviesList: ({ movies }) => movies,
@@ -25,6 +27,8 @@ const moviesStore = {
     currentPage: ({ currentPage }) => currentPage,
     moviesPerPage: ({ moviesPerPage }) => moviesPerPage,
     moviesTotal: ({ top250 }) => Object.keys(top250).length,
+    top250Movie: ({ top250 }) => top250,
+    isSearch: ({ isSearch }) => isSearch,
   },
   actions: {
     initMoviesStore: {
@@ -54,6 +58,40 @@ const moviesStore = {
       commit(CURRENT_PAGE, page);
       dispatch('fetchMovies');
     },
+    removeMovie({ commit, dispatch, getters }, id) {
+      const index = getters.top250Movie.findIndex((item) => item === id);
+
+      if (index !== -1) {
+        commit(REMOVE_MOVIE, index);
+        dispatch('fetchMovies');
+      }
+    },
+    async searchMovies({ commit, dispatch }, searchValue) {
+      try {
+        dispatch('toggleLoader', true, { root: true });
+        const response = await axios.get(`/?s=${searchValue}`);
+        console.log(response);
+        if (response.Error) {
+          throw Error(response.Error);
+        }
+
+        const movies = serializeResponse(response.Search);
+        commit(MOVIES, movies);
+      } catch (err) {
+        dispatch(
+          'showNotify',
+          { msg: err.message, title: 'Error', variant: 'danger' },
+          { root: true },
+        );
+        commit(MOVIES, {});
+      } finally {
+        dispatch('toggleLoader', false, { root: true });
+      }
+      // commit('SEARCH_TOGGLE', serchValue);
+    },
+    toggleSearch({ commit }, bool) {
+      commit(SEARCH_TOGGLE, bool);
+    },
   },
   mutations: {
     [MOVIES](state, value) {
@@ -61,6 +99,12 @@ const moviesStore = {
     },
     [CURRENT_PAGE](state, value) {
       state.currentPage = value;
+    },
+    [REMOVE_MOVIE](state, index) {
+      state.top250.splice(index, 1);
+    },
+    [SEARCH_TOGGLE](state, bool) {
+      state.isSearch = bool;
     },
   },
 };

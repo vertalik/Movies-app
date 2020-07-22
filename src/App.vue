@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Loader />
+    <Notification />
     <PosterBg :poster="posterBg" />
+    <Header />
     <MoviesList :list="moviesList" @changePoster="onChangePoster" />
     <MoviesPagination
       :current-page="currentPage"
@@ -18,6 +20,8 @@ import MoviesList from './components/MoviesList.vue';
 import PosterBg from './components/PosterBg.vue';
 import MoviesPagination from './components/MoviesPagination.vue';
 import Loader from './components/Loader.vue';
+import Header from './components/Header.vue';
+import Notification from './components/Notification.vue';
 
 export default {
   name: 'App',
@@ -26,6 +30,8 @@ export default {
     PosterBg,
     MoviesPagination,
     Loader,
+    Header,
+    Notification,
   },
   data: () => ({
     posterBg: '',

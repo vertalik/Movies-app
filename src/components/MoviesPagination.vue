@@ -1,16 +1,18 @@
 <template>
-<div class="pagination__wrapper">
-    <b-pagination
-  v-model="currentPageModel"
-  :per-page="perPage"
-  :total-rows="total"
-  prev-text="Prev"
-  next-text="Next"
-  />
-</div>
+  <div class="pagination__wrapper">
+    <b-pagination v-show="!isSearch"
+      v-model="currentPageModel"
+      :per-page="perPage"
+      :total-rows="total"
+      prev-text="Prev"
+      next-text="Next"
+    />
+  </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'MoviesPagination',
   props: {
@@ -28,6 +30,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters('movies', ['isSearch']),
     currentPageModel: {
       get() {
         return this.currentPage;
@@ -41,25 +44,24 @@ export default {
 </script>
 
 <style scoped>
-.pagination__wrapper{
+.pagination__wrapper {
   display: flex;
   justify-content: center;
   padding: 30px 0px;
 }
 
-.pagination__wrapper >>> .pagination .page-item .page-link{
+.pagination__wrapper >>> .pagination .page-item .page-link {
   background-color: transparent;
   color: #fff;
 }
 
-.pagination__wrapper >>> .pagination .page-item.active .page-link{
+.pagination__wrapper >>> .pagination .page-item.active .page-link {
   border-color: #fff;
   background-color: #fff;
   color: #000;
 }
 
-.pagination__wrapper >>> .pagination .page-item.disabled .page-link{
+.pagination__wrapper >>> .pagination .page-item.disabled .page-link {
   color: silver;
 }
-
 </style>
